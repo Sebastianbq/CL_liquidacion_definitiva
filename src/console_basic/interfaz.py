@@ -27,11 +27,15 @@ def main():
    try:
          #verificar que accion desea hacer el usuario
          action= int(input("1: nuevo empleado \
-                           2: seleccionar empleado \
-                           3: eliminar empleado\
-                           4: modificar empleado \
-                           5: liquidacion de empleado"))         
+                           \n2: seleccionar empleado \
+                           \n3: eliminar empleado\
+                           \n4: modificar empleado \
+                           \n5: liquidacion de empleado \
+                           \nopcion: "))
+         
          if action == 1:
+            ControllerWorker.EliminarTabla()
+            ControllerWorker.CreateTabla()
             worker= create_worker()
             ControllerWorker.Insertarworker(worker)
          if action == 3:
@@ -53,8 +57,9 @@ def main():
       return
     
 
-def create_worker(worker):
+def create_worker():
    try:
+      id = int(input("id del empreado:  "))
       salary_base = float(input("Salario base: "))
       months_worked = int(input("Meses trabajados: "))         
 
@@ -88,8 +93,8 @@ def create_worker(worker):
       if days_finish_quest == "no":
          changeable_variables["days_finish"]= int(input('cuantos dias faltaron para finalizar contrato: '))        
       
-      return calculateLogic.worker(salary_base,months_worked,changeable_variables["vacation"], \
-                                 changeable_variables["extra_hours"],changeable_variables["extra_hours_nigth"],changeable_variables["days_finish"])
+      return calculateLogic.worker(id, salary_base,months_worked,changeable_variables["vacation"], \
+                                 changeable_variables["extra_hours"],changeable_variables["extra_hours_nigth"], changeable_variables["days_finish"])
    
    except ValueError:
       print("Error: por favor, introduce valores numéricos válidos.")

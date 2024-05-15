@@ -1,90 +1,66 @@
 import unittest
+from unittest.mock import MagicMock
 import sys
 sys.path.append("src")
-from src.model.calculateLogic import Settlementcalculator, SalarybaseExcepction, Months_workendExcepction
-from sql import LiquidationDatabase
+import model.calculateLogic as calculateLogic
+from model.calculateLogic import worker
+from controller.controller_worker import ControllerWorker
 
-class DatabaseTest(unittest.TestCase):
+class TestWorkerController(unittest.TestCase):
+    
+    def test_create_table_success(self):
+        # Mock se usa para simular conexion y cursor
+        controller_mock = MagicMock()
+        controller_mock.ObtenerCursor.return_value.execute.return_value = None
+        
+        ControllerWorker.CreateTabla()
+        
+        controller_mock.ObtenerCursor.return_value.execute.assert_called_with("""create table worker (
+id varchar(5) primary key not null,
+salary_base int not null,
+months_worked int not null,
+vacation int not null,
+hours_extras int not null,
+extra_hours_nigth int not null,
+days_finish int not null
+);""")
+        
+    def test_create_table_already_exists(self):
+        # Mock de ControllerWorker para simular la conexión y el cursor
+        controller_mock = MagicMock()
+        # Simulando que la tabla ya existe en la base de datos
+        controller_mock.ObtenerCursor.return_value.execute.side_effect = Exception("Table already exists")
+        
+        # Llamar a la función CreateTabla()
+        with self.assertRaises(Exception) as context:
+            ControllerWorker.CreateTabla()
+        
+        # Verificar que se lance una excepción con el mensaje adecuado
+        self.assertEqual(str(context.exception), "Table already exists")
+        
+    def test_delete_table_success(self):
+        # Mock de ControllerWorker para simular la conexión y el cursor
+        controller_mock = MagicMock()
+        controller_mock.ObtenerCursor.return_value.execute.return_value = None
+        
+        # Llamar a la función EliminarTabla()
+        ControllerWorker.EliminarTabla()
+        
+        # Verificar que la función execute haya sido llamada con el comando SQL correcto
+        controller_mock.ObtenerCursor.return_value.execute.assert_called_with("""drop table worker""")
+        
+    def test_delete_table_not_exists(self):
+        # Mock de ControllerWorker para simular la conexión y el cursor
+        controller_mock = MagicMock()
+        # Simulando que la tabla no existe en la base de datos
+        controller_mock.ObtenerCursor.return_value.execute.side_effect = Exception("Table does not exist")
+        
+        # Llamar a la función EliminarTabla()
+        with self.assertRaises(Exception) as context:
+            ControllerWorker.EliminarTabla()
+        
+        # Verificar que se lance una excepción con el mensaje adecuado
+        self.assertEqual(str(context.exception), "Table does not exist")
 
-    @classmethod
-    def setUpClass(cls):
-        cls.db = LiquidationDatabase()
-
-    def testAddEmployee(self):
-        """Test para agregar un empleado a la base de datos"""
-        # Caso de agregar un empleado con información válida
-        employee_data_valid = {
-            "id": 1,
-            "salary_base": 50000,
-            "months_worked": 12,
-            "changeable_variables": {"vacation": 15, "extra_hours": 5, "extra_hours_nigth": 2, "days_finish": 30}
-        }
-        self.assertTrue(self.db.add_employee(employee_data_valid))
-
-        # Caso de intentar agregar un empleado con ID duplicado
-        employee_data_duplicate_id = {
-            "id": 1,
-            "salary_base": 60000,
-            "months_worked": 6,
-            "changeable_variables": {"vacation": 10, "extra_hours": 3, "extra_hours_nigth": 1, "days_finish": 15}
-        }
-        self.assertFalse(self.db.add_employee(employee_data_duplicate_id))
-
-    def testDeleteEmployee(self):
-        """Test para eliminar un empleado de la base de datos"""
-        # Caso de eliminar un empleado existente
-        employee_id = 1
-        self.assertTrue(self.db.delete_employee(employee_id))
-
-        # Caso de intentar eliminar un empleado que no existe
-        non_existing_employee_id = 999
-        self.assertFalse(self.db.delete_employee(non_existing_employee_id))
-
-    def testSearchEmployee(self):
-        """Test para buscar un empleado en la base de datos"""
-        # Caso de buscar un empleado existente por ID
-        employee_id = 1
-        employee_data = {
-            "id": 1,
-            "salary_base": 50000,
-            "months_worked": 12,
-            "changeable_variables": {"vacation": 15, "extra_hours": 5, "extra_hours_nigth": 2, "days_finish": 30}
-        }
-        self.assertEqual(self.db.search_employee(employee_id), employee_data)
-
-        # Caso de buscar un empleado que no existe
-        non_existing_employee_id = 999
-        self.assertIsNone(self.db.search_employee(non_existing_employee_id))
-
-    def testAddEmployeeWithZeroSalary(self):
-        """Test para agregar un empleado con salario base igual a cero"""
-        employee_data_zero_salary = {
-            "id": 2,
-            "salary_base": 0,
-            "months_worked": 6,
-            "changeable_variables": {"vacation": 10, "extra_hours": 3, "extra_hours_nigth": 1, "days_finish": 15}
-        }
-        self.assertFalse(self.db.add_employee(employee_data_zero_salary))
-
-    def testAddEmployeeWithZeroMonthsWorked(self):
-        """Test para agregar un empleado con meses trabajados igual a cero"""
-        employee_data_zero_months = {
-            "id": 3,
-            "salary_base": 60000,
-            "months_worked": 0,
-            "changeable_variables": {"vacation": 10, "extra_hours": 3, "extra_hours_nigth": 1, "days_finish": 15}
-        }
-        self.assertFalse(self.db.add_employee(employee_data_zero_months))
-
-    def testDeleteNonExistingEmployee(self):
-        """Test para intentar eliminar un empleado que no existe en la base de datos"""
-        non_existing_employee_id = 999
-        self.assertFalse(self.db.delete_employee(non_existing_employee_id))
-
-    def testSearchNonExistingEmployee(self):
-        """Test para buscar un empleado que no existe en la base de datos"""
-        non_existing_employee_id = 999
-        self.assertIsNone(self.db.search_employee(non_existing_employee_id))
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

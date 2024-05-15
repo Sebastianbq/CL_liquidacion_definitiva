@@ -2,3 +2,4 @@
 # Carpeta temporal de archivos compilados de Python
 __pycache__
 liquidacion_definitiva
+SecretConfig

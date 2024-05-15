@@ -12,7 +12,8 @@ class MisspelledException(Exception):
         super().__init__(f'no diligencio "si" o "no')
 
 class worker:
-    def __init__(self, salary_base, months_worked, vacation_days,hours_extra,hours_extra_nigth,days_finish):
+    def __init__(self, id, salary_base, months_worked, vacation_days,hours_extra,hours_extra_nigth,days_finish):
+        self.id= id
         self.salary_base = salary_base
         self.months_worked = months_worked
         self.vacations_day= vacation_days

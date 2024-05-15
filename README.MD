@@ -13,7 +13,7 @@ sale de la empresa, por despido, renuncia, finalización de contrado, entre otro
 
 ## ¿Cómo funcionar?
 
-En esta etapa del proyecto el codigo tiene una interfaz en la que solo se necesita clonar el proyecto para corrrerlo y se utiliza con el comando src\console\console_kivy.py.
+En esta etapa del proyecto el codigo tiene una interfaz en la que solo se necesita clonar el proyecto para corrrerlo y se utiliza con el comando src/console_basic/interfaz.py
 
 Y una interfaz por consola, para corrrerlo se utiliza con el comando src/console/interfaz.py. 
 

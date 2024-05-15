@@ -1,5 +1,5 @@
 import psycopg2
-import SecretConfig
+#import SecretConfig
 
 from model.calculateLogic import Settlementcalculator, SalarybaseExcepction, Months_workendExcepction, worker
 
@@ -11,15 +11,13 @@ class ControllerWorker:
 
         cursor.execute("""create table worker (
   id varchar(5) primary key not null,
-  salary_base int not null,
+  salary_base float not null,
   months_worked int not null,
-  vacation int not null,
+  vacation_day int not null,
   hours_extras int not null,
   extra_hours_nigth int not null,
-  days_finish int not null,
-
-);
-); """)
+  days_finish int not null
+);""")
         cursor.connection.commit()
 
     def EliminarTabla():
@@ -35,12 +33,12 @@ class ControllerWorker:
     def Insertarworker( worker : worker ):
         """ Recibe un a instancia de la clase Usuario y la inserta en la tabla respectiva"""
         cursor = ControllerWorker.ObtenerCursor()
-        cursor.execute( f"""insert into usuarios (id, salary_base,months_worked, vacation_day
+        cursor.execute( f"""insert into worker (id, salary_base,months_worked, vacation_day,
                             hours_extras, extra_hours_nigth, 
                             days_finish) 
                         values ('{worker.id}', '{worker.salary_base}', '{worker.months_worked}',  
                             '{worker.vacations_day}', '{worker.hours_extra}',
-                            '{worker.hours_extra_nigth}', 'worker.days_finish')""" )
+                            '{worker.hours_extra_nigth}', '{worker.days_finish}')""" )
 
         cursor.connection.commit()
 
@@ -48,7 +46,7 @@ class ControllerWorker:
         """ Trae un usuario de la tabla de usuarios por la id """
         cursor = ControllerWorker.ObtenerCursor()
 
-        cursor.execute("""insert into usuarios (id, salary_base,months_worked, vacation_day
+        cursor.execute("""insert into usuarios (id, salary_base,months_worked, vacation_day,
                             hours_extras, extra_hours_nigth, 
                             days_finish) '""" )
         fila = cursor.fetchone()
@@ -60,7 +58,12 @@ class ControllerWorker:
 
     def ObtenerCursor():
         """ Crea la conexion a la base de datos y retorna un cursor para hacer consultas """
-        connection = psycopg2.connect(database=SecretConfig.PGDATABASE, user=SecretConfig.PGUSER, password=SecretConfig.PGPASSWORD, host=SecretConfig.PGHOST, port=SecretConfig.PGPORT)
+        PGHOST='ep-fragrant-river-a5e4yp1r.us-east-2.aws.neon.tech'
+        PGDATABASE='worker'
+        PGUSER='worker_owner'
+        PGPASSWORD='nCfmLE09WVsi'
+        PGPORT= 5432
+        connection = psycopg2.connect(database=PGDATABASE, user=PGUSER, password=PGPASSWORD, host=PGHOST, port=PGPORT)
         # Todas las instrucciones se ejecutan a tavés de un cursor
         cursor = connection.cursor()
         return cursor
