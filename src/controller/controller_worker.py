@@ -76,7 +76,6 @@ class ControllerWorker:
         cursor.execute(f"""select id, salary_base, months_worked, vacation_day, hours_extras, extra_hours_nigth, days_finish
         from worker where id = {id}""" )
         fila = cursor.fetchone()
-        print(fila)
         resultado = worker( id=fila[0], salary_base=fila[1], months_worked=fila[2], vacation_days=fila[3],
                             hours_extra=fila[4], hours_extra_nigth=fila[5], days_finish=fila[6] )
         return resultado
@@ -86,10 +85,10 @@ class ControllerWorker:
     def ObtenerCursor():
         """ Crea la conexion a la base de datos y retorna un cursor para hacer consultas """
         PGHOST='ep-fragrant-river-a5e4yp1r.us-east-2.aws.neon.tech'
-        PGDATABASE='worker'
-        PGUSER='worker_owner'
-        PGPASSWORD='nCfmLE09WVsi'
-        PGPORT= 5432
+        PGDATABASE=
+        PGUSER=
+        PGPASSWORD=
+        PGPORT= 
         connection = psycopg2.connect(database=PGDATABASE, user=PGUSER, password=PGPASSWORD, host=PGHOST, port=PGPORT)
         # Todas las instrucciones se ejecutan a tavés de un cursor
         cursor = connection.cursor()
