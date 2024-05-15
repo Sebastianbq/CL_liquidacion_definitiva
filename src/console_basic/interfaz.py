@@ -40,6 +40,7 @@ def main():
          if action == 5 or action == 2:
             id= int(input("Ingrese id del empleado: "))
             result= ControllerWorker.BuscarWorkerId(id)
+            print(result)
             if action == 2:
                print(result)
                action
