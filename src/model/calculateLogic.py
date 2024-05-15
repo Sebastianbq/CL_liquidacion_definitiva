@@ -16,7 +16,7 @@ class worker:
         self.id= id
         self.salary_base = salary_base
         self.months_worked = months_worked
-        self.vacations_day= vacation_days
+        self.vacation_day= vacation_days
         self.hours_extra= hours_extra
         self.hours_extra_nigth= hours_extra_nigth
         self.days_finish= days_finish

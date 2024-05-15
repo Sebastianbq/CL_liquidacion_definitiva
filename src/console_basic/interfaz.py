@@ -24,25 +24,19 @@ def main():
    print("Ingrese la accion que dese hacer:")
    
    # Pedir los datos necesarios al usuario
-   try:
-         #verificar que accion desea hacer el usuario
-         action= int(input("1: nuevo empleado \
-                           \n2: seleccionar empleado \
-                           \n3: eliminar empleado\
-                           \n4: modificar empleado \
-                           \n5: liquidacion de empleado \
-                           \nopcion: "))
-         
+   try:     
+      action= menu()      
+      while (action != 6):         
+         if action ==6:
+            return
          if action == 1:
-            ControllerWorker.EliminarTabla()
-            ControllerWorker.CreateTabla()
             worker= create_worker()
-            ControllerWorker.Insertarworker(worker)
+            ControllerWorker.Insertarworker(worker)            
          if action == 3:
-            ControllerWorker.EliminarTabla()
-         if action == 4:
             id= int(input("Ingrese id del empleado: "))
-            ControllerWorker.BuscarWorkerId(id)
+            ControllerWorker.EliminarWorker(id)
+         if action == 4:
+            ControllerWorker.modifacarWorker()
          if action == 5 or action == 2:
             id= int(input("Ingrese id del empleado: "))
             result= ControllerWorker.BuscarWorkerId(id)
@@ -50,12 +44,23 @@ def main():
                print(result)
                action
             else:
-               ()
+               calculate_liquidacion(result)
+         action= menu()      
     #control de excepcciones
    except ValueError:
       print("Error: por favor, introduce valores numéricos válidos.")
       return
-    
+
+def menu():
+   #verificar que accion desea hacer el usuario
+   action= int(input("1: nuevo empleado \
+                     \n2: seleccionar empleado \
+                     \n3: eliminar empleado\
+                     \n4: modificar empleado \
+                     \n5: liquidacion de empleado \
+                     \n6: salir \
+                     \nopcion: "))
+   return action
 
 def create_worker():
    try:
@@ -101,11 +106,11 @@ def create_worker():
       return
    
 def calculate_liquidacion(worker):   
-   changeable_variables= []
-   changeable_variables["vacation"]= worker.vations_day
-   changeable_variables["vacation"]= worker.hours_extra
-   changeable_variables["vacation"]= worker.hours_extra_nigth
-   changeable_variables["vacation"]= worker.days_finish
+   changeable_variables= {}
+   changeable_variables["vacation"]= worker.vacation_day
+   changeable_variables["extra_hours"]= worker.hours_extra
+   changeable_variables["extra_hours_nigth"]= worker.hours_extra_nigth
+   changeable_variables["days_finish"]= worker.days_finish
    try:
       settlement_calculator = Settlementcalculator(worker.salary_base, worker.months_worked,changeable_variables)
       net_total = settlement_calculator.Calculate_net_total()
