@@ -21,6 +21,11 @@ class worker:
         self.hours_extra_nigth= hours_extra_nigth
         self.days_finish= days_finish
 
+    def __str__(self) -> str:
+        return f"id: {self.id} \nsalario base: {self.salary_base} \nmeses trabajados: {self.months_worked} \
+            \ndias pendientes de vacasiones: {self.vacations_day} \nhoras extras: {self.hours_extra}\
+            \nhoras extras nocturnas: {self.hours_extra_nigth} \ndias pendinetes para finalizar contrato: {self.days_finish}"
+
 
 #clase para implementar la logica del programa
 class Settlementcalculator:

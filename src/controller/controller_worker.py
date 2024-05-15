@@ -10,7 +10,7 @@ class ControllerWorker:
         cursor = ControllerWorker.ObtenerCursor()
 
         cursor.execute("""create table worker (
-  id varchar(5) primary key not null,
+  id int primary key not null,
   salary_base float not null,
   months_worked int not null,
   vacation_day int not null,
@@ -46,12 +46,12 @@ class ControllerWorker:
         """ Trae un usuario de la tabla de usuarios por la id """
         cursor = ControllerWorker.ObtenerCursor()
 
-        cursor.execute("""insert into usuarios (id, salary_base,months_worked, vacation_day,
-                            hours_extras, extra_hours_nigth, 
-                            days_finish) '""" )
+        cursor.execute(f"""select id, salary_base, months_worked, vacation_day, hours_extras, extra_hours_nigth, days_finish
+        from worker where id = {id}""" )
         fila = cursor.fetchone()
-        resultado = worker( id=fila[0], salaty_base=fila[1], months_worked=fila[2], vacation_day=fila[3],
-                            hours_extra=fila[4], hours_estra_nigth=fila[5], days_finish=fila[6] )
+        print(fila)
+        resultado = worker( id=fila[0], salary_base=fila[1], months_worked=fila[2], vacation_days=fila[3],
+                            hours_extra=fila[4], hours_extra_nigth=fila[5], days_finish=fila[6] )
         return resultado
 
 
